@@ -330,7 +330,7 @@ class pascal_voc(imdb):
                 if cls == '__background__':
                     continue
                 filename = self._get_voc_results_file_template().format(cls)
-                os.remove(filename)
+                #os.remove(filename)
 
     def competition_mode(self, on):
         if on:

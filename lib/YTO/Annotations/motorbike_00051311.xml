@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<annotation>
+  <folder>YTO</folder>
+  <filename>motorbike_00051311.jpg</filename>
+  <source>
+    <database>The YTO Database</database>
+    <annotation>YTO</annotation>
+    <image>flickr</image>
+    <flickerid>123456789</flickerid>
+  </source>
+  <owner>
+    <flickerid>flickerer</flickerid>
+    <name>flickser</name>
+  </owner>
+  <size>
+    <width>960</width>
+    <height>720</height>
+    <depth>3</depth>
+  </size>
+  <segmentation>0</segmentation>
+  <object>
+    <name>motorbike</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>429</xmin>
+      <ymin>323</ymin>
+      <xmax>576</xmax>
+      <ymax>492</ymax>
+    </bndbox>
+  </object>
+</annotation>

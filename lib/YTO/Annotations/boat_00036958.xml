@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<annotation>
+  <folder>YTO</folder>
+  <filename>boat_00036958.jpg</filename>
+  <source>
+    <database>The YTO Database</database>
+    <annotation>YTO</annotation>
+    <image>flickr</image>
+    <flickerid>123456789</flickerid>
+  </source>
+  <owner>
+    <flickerid>flickerer</flickerid>
+    <name>flickser</name>
+  </owner>
+  <size>
+    <width>1916</width>
+    <height>1080</height>
+    <depth>3</depth>
+  </size>
+  <segmentation>0</segmentation>
+  <object>
+    <name>boat</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>479</xmin>
+      <ymin>669</ymin>
+      <xmax>1037</xmax>
+      <ymax>982</ymax>
+    </bndbox>
+  </object>
+  <object>
+    <name>boat</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>328</xmin>
+      <ymin>869</ymin>
+      <xmax>469</xmax>
+      <ymax>980</ymax>
+    </bndbox>
+  </object>
+</annotation>

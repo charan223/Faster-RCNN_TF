@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<annotation>
+  <folder>YTO</folder>
+  <filename>aeroplane_00003747.jpg</filename>
+  <source>
+    <database>The YTO Database</database>
+    <annotation>YTO</annotation>
+    <image>flickr</image>
+    <flickerid>123456789</flickerid>
+  </source>
+  <owner>
+    <flickerid>flickerer</flickerid>
+    <name>flickser</name>
+  </owner>
+  <size>
+    <width>1280</width>
+    <height>720</height>
+    <depth>3</depth>
+  </size>
+  <segmentation>0</segmentation>
+  <object>
+    <name>aeroplane</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>131</xmin>
+      <ymin>319</ymin>
+      <xmax>726</xmax>
+      <ymax>575</ymax>
+    </bndbox>
+  </object>
+  <object>
+    <name>aeroplane</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>530</xmin>
+      <ymin>193</ymin>
+      <xmax>981</xmax>
+      <ymax>379</ymax>
+    </bndbox>
+  </object>
+  <object>
+    <name>aeroplane</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>813</xmin>
+      <ymin>195</ymin>
+      <xmax>1141</xmax>
+      <ymax>310</ymax>
+    </bndbox>
+  </object>
+</annotation>

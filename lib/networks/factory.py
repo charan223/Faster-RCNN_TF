@@ -8,7 +8,6 @@
 """Factory method for easily getting imdbs by name."""
 
 __sets = {}
-
 import networks.VGGnet_train
 import networks.VGGnet_test
 import pdb

@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<annotation>
+  <folder>YTO</folder>
+  <filename>car_00003204.jpg</filename>
+  <source>
+    <database>The YTO Database</database>
+    <annotation>YTO</annotation>
+    <image>flickr</image>
+    <flickerid>123456789</flickerid>
+  </source>
+  <owner>
+    <flickerid>flickerer</flickerid>
+    <name>flickser</name>
+  </owner>
+  <size>
+    <width>1280</width>
+    <height>720</height>
+    <depth>3</depth>
+  </size>
+  <segmentation>0</segmentation>
+  <object>
+    <name>car</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>148</xmin>
+      <ymin>253</ymin>
+      <xmax>893</xmax>
+      <ymax>495</ymax>
+    </bndbox>
+  </object>
+  <object>
+    <name>car</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>4</xmin>
+      <ymin>264</ymin>
+      <xmax>226</xmax>
+      <ymax>347</ymax>
+    </bndbox>
+  </object>
+  <object>
+    <name>car</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>764</xmin>
+      <ymin>245</ymin>
+      <xmax>1214</xmax>
+      <ymax>459</ymax>
+    </bndbox>
+  </object>
+</annotation>

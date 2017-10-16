@@ -10,6 +10,7 @@
 __sets = {}
 
 import datasets.pascal_voc
+import datasets.yto
 import datasets.imagenet3d
 import datasets.kitti
 import datasets.kitti_tracking
@@ -74,7 +75,14 @@ for split in ['71', '370']:
     print name
     __sets[name] = (lambda split=split:
             datasets.nthu(split))
+data_path='/home/charan/Faster-RCNN_TF/lib/'
 
+# Youtube dataset
+for split in ['trainval','test']:
+    name = 'yto_{}'.format(split)
+    print name
+    __sets[name] = (lambda split=split:
+            datasets.yto(split,data_path))
 
 def get_imdb(name):
     """Get an imdb (image database) by name."""

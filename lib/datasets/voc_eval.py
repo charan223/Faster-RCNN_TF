@@ -102,23 +102,24 @@ def voc_eval(detpath,
         lines = f.readlines()
     imagenames = [x.strip() for x in lines]
 
-    if not os.path.isfile(cachefile):
+    #if not os.path.isfile(cachefile):
         # load annots
-        recs = {}
-        for i, imagename in enumerate(imagenames):
+    recs = {}
+    for i, imagename in enumerate(imagenames):
             recs[imagename] = parse_rec(annopath.format(imagename))
             if i % 100 == 0:
                 print 'Reading annotation for {:d}/{:d}'.format(
                     i + 1, len(imagenames))
         # save
-        print 'Saving cached annotations to {:s}'.format(cachefile)
-        with open(cachefile, 'w') as f:
+    print 'Saving cached annotations to {:s}'.format(cachefile)
+    with open(cachefile, 'w') as f:
             cPickle.dump(recs, f)
+    '''
     else:
         # load
         with open(cachefile, 'r') as f:
             recs = cPickle.load(f)
-
+    '''
     # extract gt objects for this class
     class_recs = {}
     npos = 0
@@ -127,6 +128,9 @@ def voc_eval(detpath,
         bbox = np.array([x['bbox'] for x in R])
         difficult = np.array([x['difficult'] for x in R]).astype(np.bool)
         det = [False] * len(R)
+        #print("GODFUCK")
+        #print(difficult)
+        #print("GODFUCK")
         npos = npos + sum(~difficult)
         class_recs[imagename] = {'bbox': bbox,
                                  'difficult': difficult,
@@ -192,11 +196,17 @@ def voc_eval(detpath,
         # compute precision recall
         fp = np.cumsum(fp)
         tp = np.cumsum(tp)
+        print('fp is ',fp)
+        print('tp is ',tp)
+        print('npos is ',npos)
         rec = tp / float(npos)
+        #print('rec is ',rec)
         # avoid divide by zero in case the first detection matches a difficult
         # ground truth
         prec = tp / np.maximum(tp + fp, np.finfo(np.float64).eps)
+        #print('prec is ',prec)
         ap = voc_ap(rec, prec, use_07_metric)
+        #print('ap is ',ap)
     else:
          rec = -1
          prec = -1

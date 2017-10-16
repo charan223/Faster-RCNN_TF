@@ -17,6 +17,13 @@ import matplotlib.pyplot as plt
 from tensorflow.python.client import timeline
 import time
 
+
+#features=np.empty([1, 4096])
+#thefile = open('target_features', 'a')
+#features = []
+
+
+
 def _get_image_blob(im):
     """Converts an image into a network input.
     Arguments:
@@ -130,7 +137,7 @@ def _rescale_boxes(boxes, inds, scales):
     return boxes
 
 
-def im_detect(sess, net, im, boxes=None):
+def im_detect(sess, net, im,count, boxes=None):
     """Detect object classes in an image given object proposals.
     Arguments:
         net (caffe.Net): Fast R-CNN network to use
@@ -173,10 +180,52 @@ def im_detect(sess, net, im, boxes=None):
         run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
         run_metadata = tf.RunMetadata()
 
-    cls_score, cls_prob, bbox_pred, rois = sess.run([net.get_output('cls_score'), net.get_output('cls_prob'), net.get_output('bbox_pred'),net.get_output('rois')],
+    cls_score, cls_prob, bbox_pred, rois= sess.run([net.get_output('target/cls_score'), net.get_output('target/cls_prob'), net.get_output('target/bbox_pred'),net.get_output('target/rois')],
                                                     feed_dict=feed_dict,
                                                     options=run_options,
                                                     run_metadata=run_metadata)
+    
+    '''
+    if count==0:
+	features=feature_vector
+    
+    else:
+	k=feature_vector.shape[0]
+	for i in range(k):
+		features=np.append(features,[feature_vector[i]],axis=0)
+
+    
+    global thefile
+
+    k = feature_vector.shape[0]
+
+    k_list = feature_vector.tolist()
+    for i in range(k):
+	thefile.write("%s\n" % k_list[i])
+
+    
+    if count==0:
+	features=feature_vector
+    elif count==1:
+	features=np.concatenate([[features],[feature_vector]],axis=1)	
+    else:
+	features=np.concatenate([features,[feature_vector]],axis=1)
+    '''
+   
+    '''
+    global features
+
+    if count%500==0 and count!=0:
+	np.save('source_features_'+str(count),features)
+	features=feature_vector
+
+    if count==0:
+	features=feature_vector
+    else:
+	if count%500 !=0:
+		features=np.vstack((features,feature_vector))	
+    '''
+
 
     if cfg.TEST.HAS_RPN:
         assert len(im_scales) == 1, "Only single-image batch implemented"
@@ -284,7 +333,8 @@ def test_net(sess, net, imdb, weights_filename , max_per_image=300, thresh=0.05,
 
     if not cfg.TEST.HAS_RPN:
         roidb = imdb.roidb
-
+    print('CLASSES')
+    print(imdb.num_classes)
     for i in xrange(num_images):
         # filter out any ground truth boxes
         if cfg.TEST.HAS_RPN:
@@ -296,12 +346,14 @@ def test_net(sess, net, imdb, weights_filename , max_per_image=300, thresh=0.05,
             # that have the gt_classes field set to 0, which means there's no
             # ground truth.
             box_proposals = roidb[i]['boxes'][roidb[i]['gt_classes'] == 0]
-
+          
         im = cv2.imread(imdb.image_path_at(i))
         _t['im_detect'].tic()
-        scores, boxes = im_detect(sess, net, im, box_proposals)
+        scores, boxes = im_detect(sess, net, im,i, box_proposals)
+        #print (scores)
+        #print (boxes)
         _t['im_detect'].toc()
-
+         
         _t['misc'].tic()
         if vis:
             image = im[:, :, (2, 1, 0)]
@@ -311,15 +363,26 @@ def test_net(sess, net, imdb, weights_filename , max_per_image=300, thresh=0.05,
         # skip j = 0, because it's the background class
         for j in xrange(1, imdb.num_classes):
             inds = np.where(scores[:, j] > thresh)[0]
+            #print ('inds and thresh')
+            #print (inds)
+            #print (thresh)
             cls_scores = scores[inds, j]
             cls_boxes = boxes[inds, j*4:(j+1)*4]
             cls_dets = np.hstack((cls_boxes, cls_scores[:, np.newaxis])) \
                 .astype(np.float32, copy=False)
+            #print('CL DETS BEFORE KEEP')
+            #print(cls_dets)
             keep = nms(cls_dets, cfg.TEST.NMS)
+            #print('j and keep')
+            #print(j)
+            #print(keep)
             cls_dets = cls_dets[keep, :]
+            #print('CLS DETS')
+            #print(cls_dets)
             if vis:
                 vis_detections(image, imdb.classes[j], cls_dets)
             all_boxes[j][i] = cls_dets
+
         if vis:
            plt.show()
         # Limit to max_per_image detections *over all classes*
@@ -337,10 +400,14 @@ def test_net(sess, net, imdb, weights_filename , max_per_image=300, thresh=0.05,
               .format(i + 1, num_images, _t['im_detect'].average_time,
                       _t['misc'].average_time)
 
+
+    #np.save('source_features_final',features)
+    #print(all_boxes)
     det_file = os.path.join(output_dir, 'detections.pkl')
     with open(det_file, 'wb') as f:
         cPickle.dump(all_boxes, f, cPickle.HIGHEST_PROTOCOL)
-
+    #print('ALL BOXES')
+    #print(all_boxes)
     print 'Evaluating detections'
     imdb.evaluate_detections(all_boxes, output_dir)
 

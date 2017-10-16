@@ -51,6 +51,7 @@ class Network(object):
                     for subkey in data_dict[key]:
                         try:
                             var = tf.get_variable(subkey)
+			    print (key,"  ", subkey)
                             session.run(var.assign(data_dict[key][subkey]))
                             print "assign pretrain model "+subkey+ " to "+key
                         except ValueError:
@@ -171,10 +172,10 @@ class Network(object):
 
             rpn_labels,rpn_bbox_targets,rpn_bbox_inside_weights,rpn_bbox_outside_weights = tf.py_func(anchor_target_layer_py,[input[0],input[1],input[2],input[3], _feat_stride, anchor_scales],[tf.float32,tf.float32,tf.float32,tf.float32])
 
-            rpn_labels = tf.convert_to_tensor(tf.cast(rpn_labels,tf.int32), name = 'rpn_labels')
-            rpn_bbox_targets = tf.convert_to_tensor(rpn_bbox_targets, name = 'rpn_bbox_targets')
-            rpn_bbox_inside_weights = tf.convert_to_tensor(rpn_bbox_inside_weights , name = 'rpn_bbox_inside_weights')
-            rpn_bbox_outside_weights = tf.convert_to_tensor(rpn_bbox_outside_weights , name = 'rpn_bbox_outside_weights')
+            rpn_labels = tf.convert_to_tensor(tf.cast(rpn_labels,tf.int32), name = 'target/rpn_labels')
+            rpn_bbox_targets = tf.convert_to_tensor(rpn_bbox_targets, name = 'target/rpn_bbox_targets')
+            rpn_bbox_inside_weights = tf.convert_to_tensor(rpn_bbox_inside_weights , name = 'target/rpn_bbox_inside_weights')
+            rpn_bbox_outside_weights = tf.convert_to_tensor(rpn_bbox_outside_weights , name = 'target/rpn_bbox_outside_weights')
 
 
             return rpn_labels, rpn_bbox_targets, rpn_bbox_inside_weights, rpn_bbox_outside_weights
@@ -188,11 +189,11 @@ class Network(object):
 
             rois,labels,bbox_targets,bbox_inside_weights,bbox_outside_weights = tf.py_func(proposal_target_layer_py,[input[0],input[1],classes],[tf.float32,tf.float32,tf.float32,tf.float32,tf.float32])
 
-            rois = tf.reshape(rois,[-1,5] , name = 'rois') 
-            labels = tf.convert_to_tensor(tf.cast(labels,tf.int32), name = 'labels')
-            bbox_targets = tf.convert_to_tensor(bbox_targets, name = 'bbox_targets')
-            bbox_inside_weights = tf.convert_to_tensor(bbox_inside_weights, name = 'bbox_inside_weights')
-            bbox_outside_weights = tf.convert_to_tensor(bbox_outside_weights, name = 'bbox_outside_weights')
+            rois = tf.reshape(rois,[-1,5] , name = 'target/rois') 
+            labels = tf.convert_to_tensor(tf.cast(labels,tf.int32), name = 'target/labels')
+            bbox_targets = tf.convert_to_tensor(bbox_targets, name = 'target/bbox_targets')
+            bbox_inside_weights = tf.convert_to_tensor(bbox_inside_weights, name = 'target/bbox_inside_weights')
+            bbox_outside_weights = tf.convert_to_tensor(bbox_outside_weights, name = 'target/bbox_outside_weights')
 
            
             return rois, labels, bbox_targets, bbox_inside_weights, bbox_outside_weights
@@ -201,7 +202,7 @@ class Network(object):
     @layer
     def reshape_layer(self, input, d,name):
         input_shape = tf.shape(input)
-        if name == 'rpn_cls_prob_reshape':
+        if name == 'target/rpn_cls_prob_reshape':
              return tf.transpose(tf.reshape(tf.transpose(input,[0,3,1,2]),[input_shape[0],
                     int(d),tf.cast(tf.cast(input_shape[1],tf.float32)/tf.cast(d,tf.float32)*tf.cast(input_shape[3],tf.float32),tf.int32),input_shape[2]]),[0,2,3,1],name=name)
         else:
@@ -245,7 +246,7 @@ class Network(object):
             else:
                 feed_in, dim = (input, int(input_shape[-1]))
 
-            if name == 'bbox_pred':
+            if name == 'target/bbox_pred':
                 init_weights = tf.truncated_normal_initializer(0.0, stddev=0.001)
                 init_biases = tf.constant_initializer(0.0)
             else:
@@ -262,7 +263,7 @@ class Network(object):
     @layer
     def softmax(self, input, name):
         input_shape = tf.shape(input)
-        if name == 'rpn_cls_prob':
+        if name == 'target/rpn_cls_prob':
             return tf.reshape(tf.nn.softmax(tf.reshape(input,[-1,input_shape[3]])),[-1,input_shape[1],input_shape[2],input_shape[3]],name=name)
         else:
             return tf.nn.softmax(input,name=name)
